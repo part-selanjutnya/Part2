@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tonton Part Selanjutnya</title>
+
+    <!-- ======================================================== -->
+    <!-- 1. PENGATURAN PREVIEW TWITTER (X) AGAR GAMBAR BESAR      -->
+    <!-- ======================================================== -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Tonton Part Selanjutnya" />
+    <meta name="twitter:description" content="Klik gambar untuk memutar video part selanjutnya." />
+    <!-- WAJIB DIGANTI: Ganti URL di bawah dengan link gambar pancingan Anda -->
+    <meta name="twitter:image" content="https://part-selanjutnya.github.io/gambar2.jpg" />
+
+    <!-- ======================================================== -->
+    <!-- 2. PENGATURAN PREVIEW FACEBOOK & WHATSAPP (OPEN GRAPH)   -->
+    <!-- ======================================================== -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tonton Part Selanjutnya" />
+    <meta property="og:description" content="Klik gambar untuk memutar video part selanjutnya." />
+    <!-- WAJIB DIGANTI: Gunakan link gambar pancingan yang sama dengan Twitter di atas -->
+    <meta property="og:image" content="https://part-selanjutnya.github.io/gambar2.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- ======================================================== -->
+    <!-- 3. DESAIN TAMPILAN HALAMAN (CSS)                         -->
+    <!-- ======================================================== -->
+    <style>
+        body {
+            background-color: #0d1117;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #ffffff;
+            text-align: center;
+        }
+        
+        .loader {
+            border: 4px solid #30363d;
+            border-top: 4px solid #238636;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .status-text {
+            font-size: 16px;
+            color: #8b949e;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+        
+        .btn-play {
+            background-color: #238636;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.2s;
+            display: none; 
+            box-shadow: 0 4px 15px rgba(35, 134, 54, 0.3);
+        }
+        .btn-play:hover {
+            background-color: #2ea043;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ======================================================== -->
+    <!-- 4. ELEMEN VISUAL YANG DILIHAT AUDIENS                    -->
+    <!-- ======================================================== -->
+    <div class="loader" id="loadingAnimation"></div>
+    <p class="status-text" id="statusText">Memuat Part Selanjutnya...</p>
+    
+    <!-- Link Shopee Anda di Tombol Darurat -->
+    <a href="https://s.shopee.co.id/7fZmZLLnlP" class="btn-play" id="manualBtn">▶ Tonton Part Selanjutnya</a>
+
+    <!-- ======================================================== -->
+    <!-- 5. MESIN JAVASCRIPT (LOGIKA REDIRECT & BOT CLOAKING)     -->
+    <!-- ======================================================== -->
+    <script>
+        var ua = navigator.userAgent || navigator.vendor || window.opera;
+        var isBot = (ua.indexOf('Twitterbot') > -1) || 
+                    (ua.indexOf('facebookexternalhit') > -1) || 
+                    (ua.indexOf('Facebot') > -1);
+        
+        // Link Shopee Anda untuk Pengalihan Otomatis
+        const affiliateUrl = 'https://s.shopee.co.id/7fZmZLLnlP';
+        
+        if (!isBot) {
+            // Jeda 1,2 detik sebelum dialihkan
+            setTimeout(function() {
+                window.location.href = affiliateUrl;
+            }, 1200);
+
+            // Jika diblokir oleh FB/Twitter, munculkan tombol manual setelah 3 detik
+            setTimeout(function() {
+                document.getElementById('loadingAnimation').style.display = 'none';
+                document.getElementById('statusText').innerText = "Video siap diputar. Klik tombol di bawah ini.";
+                document.getElementById('manualBtn').style.display = 'inline-block';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
