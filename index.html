@@ -97,7 +97,7 @@
             transition: all 0.2s ease-in-out;
         }
 
-        /* CSS KHUSUS MODE FULLSCREEN (KONTROL PENUH) */
+        /* MODE FULLSCREEN KUSTOM (MEMENUHI SELURUH LAYAR HP) */
         .video-player.fullscreen-mode {
             position: fixed !important;
             top: 0 !important;
@@ -109,6 +109,30 @@
             border: none !important;
             z-index: 999999 !important;
             background: #000 !important;
+        }
+
+        /* TOMBOL PERKECIL LAYAR MELAYANG (HANYA MUNCUL SAAT FULLSCREEN) */
+        .floating-exit-btn {
+            display: none;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 1000000;
+            background: rgba(229, 9, 20, 0.95);
+            color: #ffffff;
+            border: 1px solid #ffffff;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 12px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.8);
+            cursor: pointer;
+        }
+
+        .video-player.fullscreen-mode .floating-exit-btn {
+            display: flex !important;
+            align-items: center;
+            gap: 4px;
         }
 
         .video-player iframe {
@@ -197,7 +221,7 @@
             transition: all 0.3s ease;
         }
 
-        /* TOMBOL TOGGLE FULLSCREEN (PERBESAR / PERKECIL) */
+        /* TOMBOL TOGGLE FULLSCREEN BAWAH */
         .fullscreen-btn {
             width: 100%;
             background: #282836;
@@ -315,6 +339,11 @@
         <div class="video-box-wrapper">
             <div class="video-player" id="playerContainer">
                 
+                <!-- TOMBOL MELAYANG UNTUK PERKECIL LAYAR SAAT FULLSCREEN -->
+                <button class="floating-exit-btn" onclick="toggleFullscreen()">
+                    ✖ PERKECIL LAYAR
+                </button>
+
                 <!-- 1. FAKE OVERLAY -->
                 <div id="fakeOverlay" onclick="handleFirstClick()">
                     <div class="play-btn-circle">
@@ -423,49 +452,23 @@
             if (adEl) adEl.remove();
         }
 
-        // 3. FUNGSI TOGGLE FULLSCREEN (KEMBALI KE TAMPILAN AWAL LANDING PAGE)
+        // 3. FUNGSI TOGGLE FULLSCREEN DENGAN TOMBOL MELAYANG
         function toggleFullscreen() {
             var player = document.getElementById("playerContainer");
             var btn = document.getElementById("fsToggleBtn");
             if (!player) return;
 
-            // Toggle kelas CSS fullscreen-mode
             player.classList.toggle("fullscreen-mode");
             var isFsNow = player.classList.contains("fullscreen-mode");
 
-            if (isFsNow) {
-                // Masuk Fullscreen
-                if (player.requestFullscreen) {
-                    player.requestFullscreen().catch(function(){});
-                } else if (player.webkitRequestFullscreen) {
-                    player.webkitRequestFullscreen();
+            if (btn) {
+                if (isFsNow) {
+                    btn.innerHTML = "🗗 KLIK UNTUK PERKECIL LAYAR";
+                } else {
+                    btn.innerHTML = "⛶ KLIK UNTUK PERBESAR LAYAR (FULLSCREEN)";
                 }
-                if (btn) btn.innerHTML = "🗗 KLIK UNTUK PERKECIL LAYAR";
-            } else {
-                // Keluar Fullscreen (Kembali ke Tampilan Awal Landing Page)
-                if (document.exitFullscreen && document.fullscreenElement) {
-                    document.exitFullscreen().catch(function(){});
-                } else if (document.webkitExitFullscreen && document.webkitFullscreenElement) {
-                    document.webkitExitFullscreen();
-                }
-                if (btn) btn.innerHTML = "⛶ KLIK UNTUK PERBESAR LAYAR (FULLSCREEN)";
             }
         }
-
-        // Pantau jika pengguna keluar lewat gestur HP / tombol back bawaan
-        function onFsChange() {
-            var player = document.getElementById("playerContainer");
-            var btn = document.getElementById("fsToggleBtn");
-            var nativeFs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-            
-            if (!nativeFs && player) {
-                player.classList.remove("fullscreen-mode");
-                if (btn) btn.innerHTML = "⛶ KLIK UNTUK PERBESAR LAYAR (FULLSCREEN)";
-            }
-        }
-
-        document.addEventListener("fullscreenchange", onFsChange);
-        document.addEventListener("webkitfullscreenchange", onFsChange);
 
         (function() {
             // A. LOGIKA DYNAMIC PEMUTAR VIDEO GOOGLE DRIVE (?v=ID_DRIVE)
