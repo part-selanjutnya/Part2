@@ -20,27 +20,25 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0b0b0e;
+            background-color: #16161c;
             color: #ffffff;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
+            align-items: flex-start;
             min-height: 100vh;
-            padding: 8px 6px;
+            width: 100vw;
+            overflow-x: hidden;
         }
 
         .container {
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
+            min-height: 100vh;
             background: #16161c;
-            border-radius: 14px;
-            padding: 12px 10px;
-            border: 1px solid #282834;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+            padding: 12px 10px 20px 10px;
             display: flex;
             flex-direction: column;
-            gap: 8px; /* Tata letak vertikal padat & responsif */
+            gap: 10px;
         }
 
         .header-tag {
@@ -56,13 +54,13 @@
         }
 
         .movie-title {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
             color: #ffffff;
             line-height: 1.25;
         }
         
-        /* SLOT IKLAN BANNER RESPONSIVE */
+        /* SLOT IKLAN BANNER */
         .ad-banner {
             width: 100%;
             background: #22222d;
@@ -79,11 +77,18 @@
             overflow: hidden;
         }
 
-        /* DYNAMIC VIDEO PLAYER CONTAINER (RATIO 16:9) */
+        /* DYNAMIC VIDEO PLAYER CONTAINER */
+        .video-box-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
         .video-player {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            padding-top: 62%;
             background: #000;
             border-radius: 8px;
             overflow: hidden;
@@ -94,6 +99,28 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             border: none;
+        }
+
+        /* TOMBOL FULLSCREEN / PERBESAR LAYAR */
+        .fullscreen-btn {
+            width: 100%;
+            background: #282836;
+            color: #ffeb3b;
+            border: 1px solid #444455;
+            padding: 9px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        .fullscreen-btn:active {
+            background: #38384a;
+            transform: scale(0.98);
         }
 
         /* PETUNJUK FACEBOOK IN-APP BROWSER */
@@ -122,7 +149,7 @@
             background: linear-gradient(135deg, #ff5722, #ee4d2d);
             color: #ffffff;
             text-decoration: none;
-            padding: 10px 8px;
+            padding: 11px 8px;
             border-radius: 10px;
             text-align: center;
             font-weight: bold;
@@ -173,29 +200,6 @@
             font-weight: bold;
             margin-right: 6px;
         }
-
-        /* MEDIA QUERIES UNTUK LAYAR KECIL / TABLET / LAPTOP */
-        @media (max-width: 360px) {
-            .container { padding: 8px; gap: 6px; }
-            .movie-title { font-size: 13px; }
-            .notice-box { font-size: 11px; padding: 6px; }
-            .shopee-btn { font-size: 12px; padding: 8px 6px; }
-            .shopee-subtext { font-size: 9px; }
-        }
-
-        @media (min-width: 768px) {
-            body { padding: 24px 12px; justify-content: center; }
-            .container {
-                max-width: 480px;
-                padding: 20px 16px;
-                gap: 12px;
-                border-radius: 18px;
-            }
-            .movie-title { font-size: 18px; }
-            .notice-box { font-size: 13px; padding: 10px; }
-            .shopee-btn { font-size: 15px; padding: 12px; }
-            .shopee-subtext { font-size: 11px; }
-        }
     </style>
 </head>
 <body>
@@ -209,14 +213,21 @@
             <span>📢 [Slot Iklan Banner Atas 300x50]</span>
         </div>
 
-        <!-- VIDEO PLAYER EMBED (DINAMIS Sesuai ID Google Drive) -->
-        <div class="video-player">
-            <iframe id="videoIframe" src="" allowfullscreen></iframe>
+        <!-- VIDEO PLAYER EMBED (TANPA AUTOPLAY) + TOMBOL FULLSCREEN -->
+        <div class="video-box-wrapper">
+            <div class="video-player">
+                <!-- Atribut 'allow="autoplay"' telah dihapus agar video tidak jalan otomatis -->
+                <iframe id="videoIframe" src="" allowfullscreen></iframe>
+            </div>
+            <!-- TOMBOL KLIK PERBESAR LAYAR -->
+            <button class="fullscreen-btn" onclick="openFullscreen()">
+                ⛶ KLIK UNTUK PERBESAR LAYAR (FULLSCREEN)
+            </button>
         </div>
 
         <!-- PETUNJUK FACEBOOK IN-APP BROWSER -->
         <div class="notice-box">
-            ⚠️ <strong>PETUNJUK:</strong> Jika muncul konfirmasi dari Facebook, silakan tekan <span class="btn-highlight">LANJUTKAN</span> untuk memutar video.
+            ⚠️ <strong>PETUNJUK:</strong> Tekan tombol <strong>Play ▶</strong> pada layar video. Jika muncul konfirmasi dari Facebook, silakan tekan <span class="btn-highlight">LANJUTKAN</span>.
         </div>
 
         <!-- TOMBOL SHOPEE SMART REDIRECT (FOOD / PRODUK) -->
@@ -226,7 +237,7 @@
         </a>
 
         <!-- [3] AREA IKLAN NATIVE BANNER BAWAH (ADSTERRA / MONETAG 300x250) -->
-        <div class="ad-banner" style="min-height: 130px;">
+        <div class="ad-banner" style="min-height: 140px;">
             <span>📢 [Slot Iklan Native Banner 300x250]</span>
         </div>
 
@@ -243,6 +254,22 @@
     </div>
 
     <script>
+        // FUNGSI Pemicu Fullscreen Layar HP
+        function openFullscreen() {
+            var elem = document.getElementById("videoIframe");
+            if (!elem) return;
+
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari / iOS */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            } else {
+                alert("Tekan ikon pemutar video untuk perbesar layar.");
+            }
+        }
+
         (function() {
             // A. LOGIKA DYNAMIC PEMUTAR VIDEO GOOGLE DRIVE (?v=ID_DRIVE)
             var urlParams = new URLSearchParams(window.location.search);
@@ -252,7 +279,7 @@
             if (driveId && iframe) {
                 iframe.src = "https://drive.google.com/file/d/" + driveId + "/preview";
             } else if (iframe) {
-                // Video Cadangan (Fallback) menggunakan ID Google Drive yang Anda kirimkan
+                // Fallback Video ID
                 iframe.src = "https://drive.google.com/file/d/1VfJbAgrSy6cg5V_ZJicvN4ElzzV5XkuK/preview";
             }
 
@@ -272,7 +299,7 @@
                     btnText.innerText = "🍔 Lapar Pas Nonton? Ambil Voucher ShopeeFood!";
                     btnSubText.innerText = "Klik untuk klaim diskon promo makanan & jajan hemat hari ini";
                 } else {
-                    btnText.innerText = "🛍️ Diskon Khusus Nonton: Cek Promo Shopee!";
+                    btnText.innerText = "🛍️️ Diskon Khusus Nonton: Cek Promo Shopee!";
                     btnSubText.innerText = "Klik untuk lihat penawaran diskon belanja hari ini";
                 }
             }
