@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nonton Alur Cerita Film Part 2 Full HD</title>
     <meta name="referrer" content="no-referrer-when-downgrade">
 
@@ -13,11 +13,11 @@
 
     <!-- ================================================================= -->
     <!-- [1] PASTE SCRIPT POPUNDER ADSTERRA / MONETAG DI SINI (JIKA ADA)   -->
-    <!-- Contoh: <script type='text/javascript' src='//link-popunder-anda'></script> -->
     <!-- ================================================================= -->
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #0b0b0e;
@@ -25,53 +25,58 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: flex-start;
             min-height: 100vh;
-            padding: 12px;
+            padding: 8px 6px;
         }
+
         .container {
             width: 100%;
-            max-width: 440px;
+            max-width: 420px;
             background: #16161c;
-            border-radius: 16px;
-            padding: 20px 16px;
+            border-radius: 14px;
+            padding: 12px 10px;
             border: 1px solid #282834;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* Tata letak vertikal padat & responsif */
         }
+
         .header-tag {
-            display: inline-block;
+            align-self: flex-start;
             background: #e50914;
             color: #fff;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
-            padding: 3px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-bottom: 8px;
+            letter-spacing: 0.5px;
         }
+
         .movie-title {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
-            margin-bottom: 14px;
             color: #ffffff;
-            line-height: 1.3;
+            line-height: 1.25;
         }
         
-        /* SLOT IKLAN BANNER */
+        /* SLOT IKLAN BANNER RESPONSIVE */
         .ad-banner {
             width: 100%;
             background: #22222d;
             border: 1px dashed #444455;
-            border-radius: 8px;
-            padding: 10px;
+            border-radius: 6px;
+            padding: 6px;
             text-align: center;
             color: #888899;
-            font-size: 12px;
-            margin-bottom: 14px;
-            min-height: 50px;
+            font-size: 11px;
+            min-height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
 
         /* DYNAMIC VIDEO PLAYER CONTAINER (RATIO 16:9) */
@@ -80,9 +85,8 @@
             width: 100%;
             padding-top: 56.25%; /* 16:9 Aspect Ratio */
             background: #000;
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
-            margin-bottom: 14px;
             border: 1px solid #333344;
         }
         .video-player iframe {
@@ -96,19 +100,18 @@
         .notice-box {
             background-color: #2a1b18;
             border: 1px dashed #ee4d2d;
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 14px;
-            font-size: 13px;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 12px;
             color: #e0e0e0;
             text-align: center;
-            line-height: 1.5;
+            line-height: 1.35;
         }
         .btn-highlight {
             background-color: #ffeb3b;
             color: #000;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 1px 5px;
+            border-radius: 3px;
             font-weight: 900;
         }
 
@@ -119,13 +122,12 @@
             background: linear-gradient(135deg, #ff5722, #ee4d2d);
             color: #ffffff;
             text-decoration: none;
-            padding: 14px 12px;
-            border-radius: 12px;
+            padding: 10px 8px;
+            border-radius: 10px;
             text-align: center;
             font-weight: bold;
-            font-size: 15px;
-            margin-bottom: 14px;
-            box-shadow: 0 4px 14px rgba(238, 77, 45, 0.4);
+            font-size: 14px;
+            box-shadow: 0 3px 10px rgba(238, 77, 45, 0.35);
             cursor: pointer;
             transition: transform 0.1s ease;
         }
@@ -134,9 +136,9 @@
         }
         .shopee-subtext {
             display: block;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: normal;
-            margin-top: 3px;
+            margin-top: 2px;
             opacity: 0.9;
         }
 
@@ -148,28 +150,51 @@
         .social-bar-box {
             background: #ffffff;
             color: #111111;
-            padding: 10px 14px;
-            border-radius: 30px;
-            font-size: 12px;
+            padding: 8px 12px;
+            border-radius: 25px;
+            font-size: 11px;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
             border: 1px solid #ddd;
         }
         .social-bar-badge {
             background: #ee4d2d;
             color: #fff;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
-            margin-right: 8px;
+            margin-right: 6px;
+        }
+
+        /* MEDIA QUERIES UNTUK LAYAR KECIL / TABLET / LAPTOP */
+        @media (max-width: 360px) {
+            .container { padding: 8px; gap: 6px; }
+            .movie-title { font-size: 13px; }
+            .notice-box { font-size: 11px; padding: 6px; }
+            .shopee-btn { font-size: 12px; padding: 8px 6px; }
+            .shopee-subtext { font-size: 9px; }
+        }
+
+        @media (min-width: 768px) {
+            body { padding: 24px 12px; justify-content: center; }
+            .container {
+                max-width: 480px;
+                padding: 20px 16px;
+                gap: 12px;
+                border-radius: 18px;
+            }
+            .movie-title { font-size: 18px; }
+            .notice-box { font-size: 13px; padding: 10px; }
+            .shopee-btn { font-size: 15px; padding: 12px; }
+            .shopee-subtext { font-size: 11px; }
         }
     </style>
 </head>
@@ -179,11 +204,8 @@
         <span class="header-tag">🎬 BIOSKOP MINI</span>
         <h1 class="movie-title">Lanjutan Alur Cerita Film - Part 2 Full HD</h1>
 
-        <!-- ================================================================= -->
-        <!-- [2] AREA IKLAN BANNER ATAS (ADSTERRA / MONETAG 300x50)            -->
-        <!-- ================================================================= -->
+        <!-- [2] AREA IKLAN BANNER ATAS (ADSTERRA / MONETAG 300x50) -->
         <div class="ad-banner">
-            <!-- PASTE SCRIPT IKLAN BANNER 300x50 DI SINI -->
             <span>📢 [Slot Iklan Banner Atas 300x50]</span>
         </div>
 
@@ -203,18 +225,12 @@
             <span id="shopeeSubText" class="shopee-subtext">Klik untuk klaim diskon promo & jajan hemat hari ini</span>
         </a>
 
-        <!-- ================================================================= -->
-        <!-- [3] AREA IKLAN NATIVE BANNER BAWAH (ADSTERRA / MONETAG 300x250)   -->
-        <!-- ================================================================= -->
-        <div class="ad-banner" style="min-height: 180px;">
-            <!-- PASTE SCRIPT IKLAN NATIVE BANNER 300x250 DI SINI -->
+        <!-- [3] AREA IKLAN NATIVE BANNER BAWAH (ADSTERRA / MONETAG 300x250) -->
+        <div class="ad-banner" style="min-height: 130px;">
             <span>📢 [Slot Iklan Native Banner 300x250]</span>
         </div>
 
-        <!-- ================================================================= -->
-        <!-- [4] DIRECT LINK ADSTERRA / MONETAG ATAU LINK SHOPEE AFFILIATE     -->
-        <!-- Ganti 'href' di bawah dengan Direct Link Adsterra Anda            -->
-        <!-- ================================================================= -->
+        <!-- [4] DIRECT LINK ADSTERRA / MONETAG / SHOPEE -->
         <a href="https://s.shopee.co.id/4fwigz7L9s" target="_blank" class="social-bar-link">
             <div class="social-bar-box">
                 <div style="display: flex; align-items: center;">
@@ -228,9 +244,7 @@
 
     <script>
         (function() {
-            // ===============================================================
             // A. LOGIKA DYNAMIC PEMUTAR VIDEO GOOGLE DRIVE (?v=ID_DRIVE)
-            // ===============================================================
             var urlParams = new URLSearchParams(window.location.search);
             var driveId = urlParams.get('v');
             var iframe = document.getElementById('videoIframe');
@@ -238,25 +252,19 @@
             if (driveId && iframe) {
                 iframe.src = "https://drive.google.com/file/d/" + driveId + "/preview";
             } else if (iframe) {
-                // Video Cadangan jika link diakses tanpa parameter ?v=
-                // Ganti ID di bawah dengan ID Google Drive salah satu video Part 2 Anda
-                iframe.src = "https://drive.google.com/file/d/1A2B3C4D5E6F7G8H9/preview";
+                // Video Cadangan (Fallback) menggunakan ID Google Drive yang Anda kirimkan
+                iframe.src = "https://drive.google.com/file/d/1VfJbAgrSy6cg5V_ZJicvN4ElzzV5XkuK/preview";
             }
 
-            // ===============================================================
             // B. LOGIKA SHOPEE SMART TIME-BASED REDIRECT
-            // ===============================================================
             var rawUrlProduk = "s.shopee.co.id/4fwigz7L9s"; 
             var rawUrlFood   = "spf.shopee.co.id/9zyF2jjuwl"; 
 
             var jam = new Date().getHours();
-            // Jam Makan Siang  : 11:00 - 13:59 (jam >= 11 && jam <= 13)
-            // Jam Makan Malam  : 17:00 - 20:59 (jam >= 17 && jam <= 20)
             var isJamMakan = (jam >= 11 && jam <= 13) || (jam >= 17 && jam <= 20);
 
             var selectedRawUrl = isJamMakan ? rawUrlFood : rawUrlProduk;
             
-            // Update Teks Tombol secara Dinamis
             var btnText = document.getElementById("shopeeText");
             var btnSubText = document.getElementById("shopeeSubText");
             if (btnText && btnSubText) {
@@ -269,7 +277,6 @@
                 }
             }
 
-            // Cek Perangkat Android vs iOS/Desktop untuk Deep Linking App Shopee
             var ua = navigator.userAgent || navigator.vendor || window.opera;
             var isAndroid = /Android/i.test(ua);
             var finalDeepLink = "";
