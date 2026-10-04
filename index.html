@@ -3,119 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tonton Part Selanjutnya</title>
+    <title>Nonton Alur Cerita Film Part 2 Full HD</title>
+    <meta name="referrer" content="no-referrer-when-downgrade">
 
-    <!-- ======================================================== -->
-    <!-- 1. PENGATURAN PREVIEW TWITTER (X) AGAR GAMBAR BESAR      -->
-    <!-- ======================================================== -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Tonton Part Selanjutnya" />
-    <meta name="twitter:description" content="Klik gambar untuk memutar video part selanjutnya." />
-    <!-- WAJIB DIGANTI: Ganti URL di bawah dengan link gambar pancingan Anda -->
-    <meta name="twitter:image" content="https://part-selanjutnya.github.io/gambar2.jpg" />
+    <!-- Meta Open Graph untuk Facebook Scraper -->
+    <meta property="og:type" content="video.other">
+    <meta property="og:title" content="Lanjutan Alur Cerita Film - Part 2">
+    <meta property="og:description" content="Klik untuk menonton kelanjutan video part selanjutnya...">
 
-    <!-- ======================================================== -->
-    <!-- 2. PENGATURAN PREVIEW FACEBOOK & WHATSAPP (OPEN GRAPH)   -->
-    <!-- ======================================================== -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Tonton Part Selanjutnya" />
-    <meta property="og:description" content="Klik gambar untuk memutar video part selanjutnya." />
-    <!-- WAJIB DIGANTI: Gunakan link gambar pancingan yang sama dengan Twitter di atas -->
-    <meta property="og:image" content="https://part-selanjutnya.github.io/gambar2.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <!-- ================================================================= -->
+    <!-- [1] PASTE SCRIPT POPUNDER ADSTERRA / MONETAG DI SINI (JIKA ADA)   -->
+    <!-- Contoh: <script type='text/javascript' src='//link-popunder-anda'></script> -->
+    <!-- ================================================================= -->
 
-    <!-- ======================================================== -->
-    <!-- 3. DESAIN TAMPILAN HALAMAN (CSS)                         -->
-    <!-- ======================================================== -->
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: #0d1117;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0b0b0e;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            padding: 12px;
+        }
+        .container {
+            width: 100%;
+            max-width: 440px;
+            background: #16161c;
+            border-radius: 16px;
+            padding: 20px 16px;
+            border: 1px solid #282834;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+        }
+        .header-tag {
+            display: inline-block;
+            background: #e50914;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+        }
+        .movie-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 14px;
             color: #ffffff;
-            text-align: center;
+            line-height: 1.3;
         }
         
-        .loader {
-            border: 4px solid #30363d;
-            border-top: 4px solid #238636;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .status-text {
-            font-size: 16px;
-            color: #8b949e;
-            margin-bottom: 20px;
-            padding: 0 20px;
-        }
-        
-        .btn-play {
-            background-color: #238636;
-            color: white;
-            padding: 14px 28px;
+        /* SLOT IKLAN BANNER */
+        .ad-banner {
+            width: 100%;
+            background: #22222d;
+            border: 1px dashed #444455;
             border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 16px;
-            transition: background-color 0.2s;
-            display: none; 
-            box-shadow: 0 4px 15px rgba(35, 134, 54, 0.3);
+            padding: 10px;
+            text-align: center;
+            color: #888899;
+            font-size: 12px;
+            margin-bottom: 14px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .btn-play:hover {
-            background-color: #2ea043;
+
+        /* DYNAMIC VIDEO PLAYER CONTAINER (RATIO 16:9) */
+        .video-player {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 14px;
+            border: 1px solid #333344;
+        }
+        .video-player iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+        }
+
+        /* PETUNJUK FACEBOOK IN-APP BROWSER */
+        .notice-box {
+            background-color: #2a1b18;
+            border: 1px dashed #ee4d2d;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 14px;
+            font-size: 13px;
+            color: #e0e0e0;
+            text-align: center;
+            line-height: 1.5;
+        }
+        .btn-highlight {
+            background-color: #ffeb3b;
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 900;
+        }
+
+        /* TOMBOL SHOPEE SMART REDIRECT */
+        .shopee-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #ff5722, #ee4d2d);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 14px rgba(238, 77, 45, 0.4);
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        .shopee-btn:active {
+            transform: scale(0.98);
+        }
+        .shopee-subtext {
+            display: block;
+            font-size: 11px;
+            font-weight: normal;
+            margin-top: 3px;
+            opacity: 0.9;
+        }
+
+        /* SOCIAL BAR / DIRECT LINK BOX */
+        .social-bar-link {
+            text-decoration: none;
+            display: block;
+        }
+        .social-bar-box {
+            background: #ffffff;
+            color: #111111;
+            padding: 10px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            border: 1px solid #ddd;
+        }
+        .social-bar-badge {
+            background: #ee4d2d;
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 8px;
         }
     </style>
 </head>
 <body>
-    
-    <!-- ======================================================== -->
-    <!-- 4. ELEMEN VISUAL YANG DILIHAT AUDIENS                    -->
-    <!-- ======================================================== -->
-    <div class="loader" id="loadingAnimation"></div>
-    <p class="status-text" id="statusText">Memuat Part Selanjutnya...</p>
-    
-    <!-- Link Shopee Anda di Tombol Darurat -->
-    <a href="https://s.shopee.co.id/7fZmZLLnlP" class="btn-play" id="manualBtn">▶ Tonton Part Selanjutnya</a>
 
-    <!-- ======================================================== -->
-    <!-- 5. MESIN JAVASCRIPT (LOGIKA REDIRECT & BOT CLOAKING)     -->
-    <!-- ======================================================== -->
+    <div class="container">
+        <span class="header-tag">🎬 BIOSKOP MINI</span>
+        <h1 class="movie-title">Lanjutan Alur Cerita Film - Part 2 Full HD</h1>
+
+        <!-- ================================================================= -->
+        <!-- [2] AREA IKLAN BANNER ATAS (ADSTERRA / MONETAG 300x50)            -->
+        <!-- ================================================================= -->
+        <div class="ad-banner">
+            <!-- PASTE SCRIPT IKLAN BANNER 300x50 DI SINI -->
+            <span>📢 [Slot Iklan Banner Atas 300x50]</span>
+        </div>
+
+        <!-- VIDEO PLAYER EMBED (DINAMIS Sesuai ID Google Drive) -->
+        <div class="video-player">
+            <iframe id="videoIframe" src="" allowfullscreen></iframe>
+        </div>
+
+        <!-- PETUNJUK FACEBOOK IN-APP BROWSER -->
+        <div class="notice-box">
+            ⚠️ <strong>PETUNJUK:</strong> Jika muncul konfirmasi dari Facebook, silakan tekan <span class="btn-highlight">LANJUTKAN</span> untuk memutar video.
+        </div>
+
+        <!-- TOMBOL SHOPEE SMART REDIRECT (FOOD / PRODUK) -->
+        <a id="shopeeBtn" href="#" target="_blank" class="shopee-btn">
+            🍿 <span id="shopeeText">Lapar Pas Nonton? Ambil Voucher ShopeeFood!</span>
+            <span id="shopeeSubText" class="shopee-subtext">Klik untuk klaim diskon promo & jajan hemat hari ini</span>
+        </a>
+
+        <!-- ================================================================= -->
+        <!-- [3] AREA IKLAN NATIVE BANNER BAWAH (ADSTERRA / MONETAG 300x250)   -->
+        <!-- ================================================================= -->
+        <div class="ad-banner" style="min-height: 180px;">
+            <!-- PASTE SCRIPT IKLAN NATIVE BANNER 300x250 DI SINI -->
+            <span>📢 [Slot Iklan Native Banner 300x250]</span>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- [4] DIRECT LINK ADSTERRA / MONETAG ATAU LINK SHOPEE AFFILIATE     -->
+        <!-- Ganti 'href' di bawah dengan Direct Link Adsterra Anda            -->
+        <!-- ================================================================= -->
+        <a href="https://s.shopee.co.id/4fwigz7L9s" target="_blank" class="social-bar-link">
+            <div class="social-bar-box">
+                <div style="display: flex; align-items: center;">
+                    <span class="social-bar-badge">1</span>
+                    <span>🎁 Klaim Saldo Bonus Rp50.000 Gratis!</span>
+                </div>
+                <span style="color: #007bff; text-decoration: underline;">Buka &raquo;</span>
+            </div>
+        </a>
+    </div>
+
     <script>
-        var ua = navigator.userAgent || navigator.vendor || window.opera;
-        var isBot = (ua.indexOf('Twitterbot') > -1) || 
-                    (ua.indexOf('facebookexternalhit') > -1) || 
-                    (ua.indexOf('Facebot') > -1);
-        
-        // Link Shopee Anda untuk Pengalihan Otomatis
-        const affiliateUrl = 'https://s.shopee.co.id/7fZmZLLnlP';
-        
-        if (!isBot) {
-            // Jeda 1,2 detik sebelum dialihkan
-            setTimeout(function() {
-                window.location.href = affiliateUrl;
-            }, 1200);
+        (function() {
+            // ===============================================================
+            // A. LOGIKA DYNAMIC PEMUTAR VIDEO GOOGLE DRIVE (?v=ID_DRIVE)
+            // ===============================================================
+            var urlParams = new URLSearchParams(window.location.search);
+            var driveId = urlParams.get('v');
+            var iframe = document.getElementById('videoIframe');
 
-            // Jika diblokir oleh FB/Twitter, munculkan tombol manual setelah 3 detik
-            setTimeout(function() {
-                document.getElementById('loadingAnimation').style.display = 'none';
-                document.getElementById('statusText').innerText = "Video siap diputar. Klik tombol di bawah ini.";
-                document.getElementById('manualBtn').style.display = 'inline-block';
-            }, 3000);
-        }
+            if (driveId && iframe) {
+                iframe.src = "https://drive.google.com/file/d/" + driveId + "/preview";
+            } else if (iframe) {
+                // Video Cadangan jika link diakses tanpa parameter ?v=
+                // Ganti ID di bawah dengan ID Google Drive salah satu video Part 2 Anda
+                iframe.src = "https://drive.google.com/file/d/1A2B3C4D5E6F7G8H9/preview";
+            }
+
+            // ===============================================================
+            // B. LOGIKA SHOPEE SMART TIME-BASED REDIRECT
+            // ===============================================================
+            var rawUrlProduk = "s.shopee.co.id/4fwigz7L9s"; 
+            var rawUrlFood   = "spf.shopee.co.id/9zyF2jjuwl"; 
+
+            var jam = new Date().getHours();
+            // Jam Makan Siang  : 11:00 - 13:59 (jam >= 11 && jam <= 13)
+            // Jam Makan Malam  : 17:00 - 20:59 (jam >= 17 && jam <= 20)
+            var isJamMakan = (jam >= 11 && jam <= 13) || (jam >= 17 && jam <= 20);
+
+            var selectedRawUrl = isJamMakan ? rawUrlFood : rawUrlProduk;
+            
+            // Update Teks Tombol secara Dinamis
+            var btnText = document.getElementById("shopeeText");
+            var btnSubText = document.getElementById("shopeeSubText");
+            if (btnText && btnSubText) {
+                if (isJamMakan) {
+                    btnText.innerText = "🍔 Lapar Pas Nonton? Ambil Voucher ShopeeFood!";
+                    btnSubText.innerText = "Klik untuk klaim diskon promo makanan & jajan hemat hari ini";
+                } else {
+                    btnText.innerText = "🛍️ Diskon Khusus Nonton: Cek Promo Shopee!";
+                    btnSubText.innerText = "Klik untuk lihat penawaran diskon belanja hari ini";
+                }
+            }
+
+            // Cek Perangkat Android vs iOS/Desktop untuk Deep Linking App Shopee
+            var ua = navigator.userAgent || navigator.vendor || window.opera;
+            var isAndroid = /Android/i.test(ua);
+            var finalDeepLink = "";
+
+            if (isAndroid) {
+                finalDeepLink = "intent://" + selectedRawUrl + "#Intent;scheme=https;package=com.shopee.id;end;";
+            } else {
+                finalDeepLink = "https://" + selectedRawUrl;
+            }
+
+            var btn = document.getElementById("shopeeBtn");
+            if (btn) {
+                btn.href = finalDeepLink;
+            }
+        })();
     </script>
+
 </body>
 </html>
