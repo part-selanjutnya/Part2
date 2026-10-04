@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nonton Alur Cerita Film Part 2 Full HD</title>
+    <title>Nonton Alur Cerita Film Full HD</title>
     <meta name="referrer" content="no-referrer-when-downgrade">
 
     <!-- Meta Open Graph untuk Facebook Scraper -->
     <meta property="og:type" content="video.other">
-    <meta property="og:title" content="Lanjutan Alur Cerita Film - Part 2">
+    <meta property="og:title" content="Lanjutan Alur Cerita Film Full HD">
     <meta property="og:description" content="Klik untuk menonton kelanjutan video part selanjutnya...">
 
     <style>
@@ -81,29 +81,27 @@
             gap: 6px;
         }
 
-        /* DYNAMIC VIDEO PLAYER BOX DENGAN OVERFLOW HIDDEN */
         .video-player {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* Rasio Presisi 16:9 */
+            padding-top: 56.25%;
             background: #000;
             border-radius: 8px;
-            overflow: hidden; /* MEMOTONG SEMUA ELEMEN OUT-OF-BOUNDS */
+            overflow: hidden;
             border: 1px solid #333344;
             transition: all 0.2s ease-in-out;
         }
 
-        /* TRIK KONTROL CROP SANGAT PRESISI UNTUK MENGHILANGKAN GARIS & TOMBOL */
         .video-player iframe {
             position: absolute;
-            top: -18% !important;    /* Mendorong garis/ikon atas jauh ke luar area */
-            left: -8% !important;   /* Memperluas margin kiri-kanan */
-            width: 116% !important;  /* Memperbesar skala video */
-            height: 136% !important; /* Mendorong tombol & garis bawah keluar area */
+            top: -9% !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 118% !important;
             border: none;
         }
 
-        /* MODE FULLSCREEN KUSTOM (MEMENUHI SELURUH LAYAR HP) */
+        /* MODE FULLSCREEN KUSTOM */
         .video-player.fullscreen-mode {
             position: fixed !important;
             top: 0 !important;
@@ -118,13 +116,12 @@
         }
 
         .video-player.fullscreen-mode iframe {
-            top: -14% !important;
-            left: -5% !important;
-            width: 110% !important;
-            height: 128% !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
         }
 
-        /* TOMBOL PERKECIL LAYAR MELAYANG SAAT FULLSCREEN */
         .floating-exit-btn {
             display: none;
             position: absolute;
@@ -148,11 +145,14 @@
             gap: 4px;
         }
 
-        /* 1. FAKE OVERLAY */
+        /* FAKE OVERLAY DENGAN PREVIEW GAMBAR DINAMIS */
         #fakeOverlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #0a0a0d url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=600&auto=format&fit=crop') center/cover;
+            background-color: #0a0a0d;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
             z-index: 10;
             display: flex;
             flex-direction: column;
@@ -189,7 +189,7 @@
             border: 1px solid #444;
         }
 
-        /* 2. AD OVERLAY */
+        /* AD OVERLAY */
         #adOverlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -244,9 +244,22 @@
             gap: 6px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.4);
         }
-        .fullscreen-btn:active {
-            background: #38384a;
-            transform: scale(0.98);
+
+        /* TOMBOL DINAMIS NEXT PART */
+        .next-part-btn {
+            display: none;
+            width: 100%;
+            background: linear-gradient(135deg, #e50914, #b20710);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(229, 9, 20, 0.5);
+            animation: pulse 1.8s infinite;
         }
 
         /* PETUNJUK FACEBOOK IN-APP BROWSER */
@@ -325,7 +338,7 @@
 
         @keyframes pulse {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(229, 9, 20, 0); }
+            70% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(229, 9, 20, 0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0); }
         }
     </style>
@@ -334,7 +347,7 @@
 
     <div class="container">
         <span class="header-tag">🎬 BIOSKOP MINI</span>
-        <h1 class="movie-title">Lanjutan Alur Cerita Film - Part 2 Full HD</h1>
+        <h1 class="movie-title" id="mainMovieTitle">Lanjutan Alur Cerita Film - Part 2 Full HD</h1>
 
         <!-- [2] AREA IKLAN BANNER ATAS (ADSTERRA / MONETAG 300x50) -->
         <div class="ad-banner">
@@ -350,12 +363,12 @@
                     ✖ PERKECIL LAYAR
                 </button>
 
-                <!-- 1. FAKE OVERLAY -->
+                <!-- 1. FAKE OVERLAY DENGAN GAMBAR PREVIEW AUTOMATIS -->
                 <div id="fakeOverlay" onclick="handleFirstClick()">
                     <div class="play-btn-circle">
                         <div class="play-icon-triangle"></div>
                     </div>
-                    <span class="fake-overlay-text">KLIK PLAY UNTUK MEMUTAR PART 2</span>
+                    <span class="fake-overlay-text" id="fakeOverlayText">KLIK PLAY UNTUK MEMUTAR PART 2</span>
                 </div>
 
                 <!-- 2. AD OVERLAY -->
@@ -370,13 +383,18 @@
                     </button>
                 </div>
 
-                <!-- 3. GOOGLE DRIVE IFRAME (HASIL CROP MAKSIMAL) -->
+                <!-- 3. GOOGLE DRIVE IFRAME -->
                 <iframe id="videoIframe" src="" allowfullscreen></iframe>
             </div>
 
             <!-- TOMBOL TOGGLE FULLSCREEN PERBESAR / PERKECIL LAYAR -->
             <button class="fullscreen-btn" id="fsToggleBtn" onclick="toggleFullscreen()">
                 ⛶ KLIK UNTUK PERBESAR LAYAR (FULLSCREEN)
+            </button>
+
+            <!-- TOMBOL DINAMIS NEXT PART -->
+            <button class="next-part-btn" id="nextPartBtn" onclick="playNextPart()">
+                🎬 LANJUT NONTON PART NEXT ▶
             </button>
         </div>
 
@@ -411,6 +429,8 @@
     <script>
         var globalRedirectUrl = "";
         var isFirstClickDone = false;
+        var partsData = {};
+        var currentPartNum = 2;
 
         // 1. KLIK PERTAMA DARI PENONTON
         function handleFirstClick() {
@@ -442,7 +462,7 @@
                             skipBtn.style.background = "#e50914";
                             skipBtn.style.color = "#ffffff";
                             skipBtn.style.cursor = "pointer";
-                            skipBtn.innerHTML = "LEWATI IKLAN & NONTON PART 2 ▶";
+                            skipBtn.innerHTML = "LEWATI IKLAN & NONTON SEKARANG ▶";
                         }
                     }
                 }, 1000);
@@ -454,11 +474,46 @@
             var fakeEl = document.getElementById("fakeOverlay");
             var adEl = document.getElementById("adOverlay");
             
-            if (fakeEl) fakeEl.remove();
-            if (adEl) adEl.remove();
+            if (fakeEl) fakeEl.style.display = "none";
+            if (adEl) adEl.style.display = "none";
         }
 
-        // 3. FUNGSI TOGGLE FULLSCREEN DENGAN TOMBOL MELAYANG
+        // 3. FUNGSI MULTI-PART OTOMATIS
+        function playNextPart() {
+            var nextNum = currentPartNum + 1;
+            
+            if (partsData[nextNum]) {
+                currentPartNum = nextNum;
+
+                if (globalRedirectUrl) {
+                    window.open(globalRedirectUrl, '_blank');
+                }
+
+                var iframe = document.getElementById('videoIframe');
+                if (iframe) {
+                    iframe.src = "https://drive.google.com/file/d/" + partsData[currentPartNum] + "/preview";
+                }
+
+                var mainTitle = document.getElementById("mainMovieTitle");
+                var isLastPart = !partsData[currentPartNum + 1];
+                if (mainTitle) {
+                    mainTitle.innerText = "Lanjutan Alur Cerita Film - Part " + currentPartNum + (isLastPart ? " (Selesai)" : "");
+                }
+
+                var nextBtn = document.getElementById("nextPartBtn");
+                if (nextBtn) {
+                    if (partsData[currentPartNum + 1]) {
+                        nextBtn.innerText = "🎬 LANJUT NONTON PART " + (currentPartNum + 1) + " ▶";
+                    } else {
+                        nextBtn.style.display = "none";
+                    }
+                }
+
+                document.getElementById("playerContainer").scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // 4. FUNGSI TOGGLE FULLSCREEN
         function toggleFullscreen() {
             var player = document.getElementById("playerContainer");
             var btn = document.getElementById("fsToggleBtn");
@@ -477,17 +532,38 @@
         }
 
         (function() {
-            // A. LOGIKA DYNAMIC GOOGLE DRIVE IFRAME EMBED (?v=ID_DRIVE)
             var urlParams = new URLSearchParams(window.location.search);
-            var driveId = urlParams.get('v') || "1VfJbAgrSy6cg5V_ZJicvN4ElzzV5XkuK";
             
-            var iframe = document.getElementById('videoIframe');
+            partsData[2] = urlParams.get('v') || urlParams.get('v2') || "1VfJbAgrSy6cg5V_ZJicvN4ElzzV5XkuK";
 
-            if (driveId && iframe) {
-                iframe.src = "https://drive.google.com/file/d/" + driveId + "/preview";
+            for (var i = 3; i <= 10; i++) {
+                var pId = urlParams.get('v' + i);
+                if (pId) {
+                    partsData[i] = pId;
+                }
             }
 
-            // B. LOGIKA SHOPEE SMART TIME-BASED REDIRECT
+            // SETTING GAMBAR THUMBNAIL DINAMIS DARI GOOGLE DRIVE
+            var fakeOverlay = document.getElementById('fakeOverlay');
+            if (fakeOverlay && partsData[2]) {
+                var thumbnailUrl = "https://lh3.googleusercontent.com/d/" + partsData[2];
+                fakeOverlay.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('" + thumbnailUrl + "')";
+            }
+
+            var iframe = document.getElementById('videoIframe');
+            if (iframe && partsData[2]) {
+                iframe.src = "https://drive.google.com/file/d/" + partsData[2] + "/preview";
+            }
+
+            if (partsData[3]) {
+                var nextBtn = document.getElementById("nextPartBtn");
+                if (nextBtn) {
+                    nextBtn.innerText = "🎬 LANJUT NONTON PART 3 ▶";
+                    nextBtn.style.display = "block";
+                }
+            }
+
+            // LOGIKA SHOPEE SMART TIME-BASED REDIRECT
             var rawUrlProduk = "s.shopee.co.id/4fwigz7L9s"; 
             var rawUrlFood   = "spf.shopee.co.id/9zyF2jjuwl"; 
 
