@@ -11,10 +11,6 @@
     <meta property="og:title" content="Lanjutan Alur Cerita Film - Part 2">
     <meta property="og:description" content="Klik untuk menonton kelanjutan video part selanjutnya...">
 
-    <!-- ================================================================= -->
-    <!-- [1] PASTE SCRIPT POPUNDER ADSTERRA / MONETAG DI SINI (JIKA ADA)   -->
-    <!-- ================================================================= -->
-
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
@@ -85,16 +81,26 @@
             gap: 6px;
         }
 
-        /* DYNAMIC VIDEO PLAYER BOX */
+        /* DYNAMIC VIDEO PLAYER BOX DENGAN OVERFLOW HIDDEN */
         .video-player {
             position: relative;
             width: 100%;
-            padding-top: 62%;
+            padding-top: 56.25%; /* Rasio Presisi 16:9 */
             background: #000;
             border-radius: 8px;
-            overflow: hidden;
+            overflow: hidden; /* MEMOTONG SEMUA ELEMEN OUT-OF-BOUNDS */
             border: 1px solid #333344;
             transition: all 0.2s ease-in-out;
+        }
+
+        /* TRIK KONTROL CROP SANGAT PRESISI UNTUK MENGHILANGKAN GARIS & TOMBOL */
+        .video-player iframe {
+            position: absolute;
+            top: -18% !important;    /* Mendorong garis/ikon atas jauh ke luar area */
+            left: -8% !important;   /* Memperluas margin kiri-kanan */
+            width: 116% !important;  /* Memperbesar skala video */
+            height: 136% !important; /* Mendorong tombol & garis bawah keluar area */
+            border: none;
         }
 
         /* MODE FULLSCREEN KUSTOM (MEMENUHI SELURUH LAYAR HP) */
@@ -111,11 +117,11 @@
             background: #000 !important;
         }
 
-        .video-player iframe {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            border: none;
+        .video-player.fullscreen-mode iframe {
+            top: -14% !important;
+            left: -5% !important;
+            width: 110% !important;
+            height: 128% !important;
         }
 
         /* TOMBOL PERKECIL LAYAR MELAYANG SAAT FULLSCREEN */
@@ -364,7 +370,7 @@
                     </button>
                 </div>
 
-                <!-- 3. GOOGLE DRIVE IFRAME RESMI (DIJAMIN MUNCUL & BISA DIPUTAR) -->
+                <!-- 3. GOOGLE DRIVE IFRAME (HASIL CROP MAKSIMAL) -->
                 <iframe id="videoIframe" src="" allowfullscreen></iframe>
             </div>
 
@@ -376,7 +382,7 @@
 
         <!-- PETUNJUK FACEBOOK IN-APP BROWSER -->
         <div class="notice-box">
-            ⚠️ <strong>PETUNJUK:</strong> Tekan tombol Play pada pemutar video. Jika muncul konfirmasi Facebook, tekan <span class="btn-highlight">LANJUTKAN</span>.
+            ⚠️ <strong>PETUNJUK:</strong> Tekan layar video untuk memutar/pause. Jika muncul konfirmasi Facebook, tekan <span class="btn-highlight">LANJUTKAN</span>.
         </div>
 
         <!-- TOMBOL SHOPEE SMART REDIRECT (FOOD / PRODUK) -->
