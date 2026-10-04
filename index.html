@@ -77,7 +77,7 @@
             overflow: hidden;
         }
 
-        /* DYNAMIC VIDEO PLAYER CONTAINER */
+        /* CONTAINER PLAYER VIDEO & OVERLAY */
         .video-box-wrapper {
             width: 100%;
             display: flex;
@@ -85,6 +85,7 @@
             gap: 6px;
         }
 
+        /* DYNAMIC VIDEO PLAYER BOX */
         .video-player {
             position: relative;
             width: 100%;
@@ -93,7 +94,23 @@
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid #333344;
+            transition: all 0.2s ease-in-out;
         }
+
+        /* CSS KHUSUS MODE FULLSCREEN (KONTROL PENUH) */
+        .video-player.fullscreen-mode {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            padding-top: 0 !important;
+            border-radius: 0 !important;
+            border: none !important;
+            z-index: 999999 !important;
+            background: #000 !important;
+        }
+
         .video-player iframe {
             position: absolute;
             top: 0; left: 0;
@@ -101,7 +118,86 @@
             border: none;
         }
 
-        /* TOMBOL FULLSCREEN / PERBESAR LAYAR */
+        /* 1. FAKE OVERLAY */
+        #fakeOverlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #0a0a0d url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=600&auto=format&fit=crop') center/cover;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .play-btn-circle {
+            width: 65px;
+            height: 65px;
+            background: rgba(229, 9, 20, 0.95);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.8);
+            animation: pulse 1.5s infinite;
+        }
+        .play-icon-triangle {
+            width: 0; height: 0;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-left: 20px solid #ffffff;
+            margin-left: 4px;
+        }
+        .fake-overlay-text {
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 5px 12px;
+            border-radius: 4px;
+            border: 1px solid #444;
+        }
+
+        /* 2. AD OVERLAY */
+        #adOverlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #111116;
+            z-index: 9;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 12px;
+            gap: 8px;
+        }
+        .ad-promo-box {
+            background: linear-gradient(135deg, #2a1b18, #1f1412);
+            border: 1px dashed #ee4d2d;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #fff;
+            font-size: 11px;
+            width: 100%;
+            line-height: 1.4;
+        }
+        #skipBtn {
+            background: #333344;
+            color: #888899;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: not-allowed;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+
+        /* TOMBOL TOGGLE FULLSCREEN (PERBESAR / PERKECIL) */
         .fullscreen-btn {
             width: 100%;
             background: #282836;
@@ -156,10 +252,6 @@
             font-size: 14px;
             box-shadow: 0 3px 10px rgba(238, 77, 45, 0.35);
             cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-        .shopee-btn:active {
-            transform: scale(0.98);
         }
         .shopee-subtext {
             display: block;
@@ -200,6 +292,12 @@
             font-weight: bold;
             margin-right: 6px;
         }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(229, 9, 20, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 9, 20, 0); }
+        }
     </style>
 </head>
 <body>
@@ -213,21 +311,43 @@
             <span>📢 [Slot Iklan Banner Atas 300x50]</span>
         </div>
 
-        <!-- VIDEO PLAYER EMBED (TANPA AUTOPLAY) + TOMBOL FULLSCREEN -->
+        <!-- VIDEO PLAYER EMBED + PRE-ROLL AD OVERLAY -->
         <div class="video-box-wrapper">
-            <div class="video-player">
-                <!-- Atribut 'allow="autoplay"' telah dihapus agar video tidak jalan otomatis -->
+            <div class="video-player" id="playerContainer">
+                
+                <!-- 1. FAKE OVERLAY -->
+                <div id="fakeOverlay" onclick="handleFirstClick()">
+                    <div class="play-btn-circle">
+                        <div class="play-icon-triangle"></div>
+                    </div>
+                    <span class="fake-overlay-text">KLIK PLAY UNTUK MEMUTAR PART 2</span>
+                </div>
+
+                <!-- 2. AD OVERLAY -->
+                <div id="adOverlay">
+                    <span style="color: #ffeb3b; font-size: 11px; font-weight: bold;">📢 SPONSOR / IKLAN</span>
+                    <div class="ad-promo-box">
+                        🍿 <strong>PROMO NONTON HEMAT!</strong><br>
+                        Ambil Voucher ShopeeFood Diskon 50% & Gratis Ongkir Hari Ini.
+                    </div>
+                    <button id="skipBtn" disabled onclick="unlockRealVideo()">
+                        Tunggu <span id="timerText">5</span> detik...
+                    </button>
+                </div>
+
+                <!-- 3. REAL VIDEO GOOGLE DRIVE IFRAME -->
                 <iframe id="videoIframe" src="" allowfullscreen></iframe>
             </div>
-            <!-- TOMBOL KLIK PERBESAR LAYAR -->
-            <button class="fullscreen-btn" onclick="openFullscreen()">
+
+            <!-- TOMBOL TOGGLE FULLSCREEN PERBESAR / PERKECIL LAYAR -->
+            <button class="fullscreen-btn" id="fsToggleBtn" onclick="toggleFullscreen()">
                 ⛶ KLIK UNTUK PERBESAR LAYAR (FULLSCREEN)
             </button>
         </div>
 
         <!-- PETUNJUK FACEBOOK IN-APP BROWSER -->
         <div class="notice-box">
-            ⚠️ <strong>PETUNJUK:</strong> Tekan tombol <strong>Play ▶</strong> pada layar video. Jika muncul konfirmasi dari Facebook, silakan tekan <span class="btn-highlight">LANJUTKAN</span>.
+            ⚠️ <strong>PETUNJUK:</strong> Jika muncul konfirmasi dari Facebook, silakan tekan <span class="btn-highlight">LANJUTKAN</span> untuk memutar video.
         </div>
 
         <!-- TOMBOL SHOPEE SMART REDIRECT (FOOD / PRODUK) -->
@@ -254,21 +374,98 @@
     </div>
 
     <script>
-        // FUNGSI Pemicu Fullscreen Layar HP
-        function openFullscreen() {
-            var elem = document.getElementById("videoIframe");
-            if (!elem) return;
+        var globalRedirectUrl = "";
+        var isFirstClickDone = false;
 
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) { /* Safari / iOS */
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { /* IE11 */
-                elem.msRequestFullscreen();
-            } else {
-                alert("Tekan ikon pemutar video untuk perbesar layar.");
+        // 1. KLIK PERTAMA DARI PENONTON
+        function handleFirstClick() {
+            if (!isFirstClickDone) {
+                isFirstClickDone = true;
+
+                if (globalRedirectUrl) {
+                    window.open(globalRedirectUrl, '_blank');
+                }
+
+                var fakeEl = document.getElementById("fakeOverlay");
+                if (fakeEl) fakeEl.style.display = "none";
+                
+                var adEl = document.getElementById("adOverlay");
+                if (adEl) adEl.style.display = "flex";
+
+                var timeLeft = 5;
+                var timerSpan = document.getElementById("timerText");
+                var skipBtn = document.getElementById("skipBtn");
+
+                var countdown = setInterval(function() {
+                    timeLeft--;
+                    if (timerSpan) timerSpan.innerText = timeLeft;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        if (skipBtn) {
+                            skipBtn.disabled = false;
+                            skipBtn.style.background = "#e50914";
+                            skipBtn.style.color = "#ffffff";
+                            skipBtn.style.cursor = "pointer";
+                            skipBtn.innerHTML = "LEWATI IKLAN & NONTON PART 2 ▶";
+                        }
+                    }
+                }, 1000);
             }
         }
+
+        // 2. MEMBUKA VIDEO ASLI & HAPUS OVERLAY PERMANEN
+        function unlockRealVideo() {
+            var fakeEl = document.getElementById("fakeOverlay");
+            var adEl = document.getElementById("adOverlay");
+            
+            if (fakeEl) fakeEl.remove();
+            if (adEl) adEl.remove();
+        }
+
+        // 3. FUNGSI TOGGLE FULLSCREEN (KEMBALI KE TAMPILAN AWAL LANDING PAGE)
+        function toggleFullscreen() {
+            var player = document.getElementById("playerContainer");
+            var btn = document.getElementById("fsToggleBtn");
+            if (!player) return;
+
+            // Toggle kelas CSS fullscreen-mode
+            player.classList.toggle("fullscreen-mode");
+            var isFsNow = player.classList.contains("fullscreen-mode");
+
+            if (isFsNow) {
+                // Masuk Fullscreen
+                if (player.requestFullscreen) {
+                    player.requestFullscreen().catch(function(){});
+                } else if (player.webkitRequestFullscreen) {
+                    player.webkitRequestFullscreen();
+                }
+                if (btn) btn.innerHTML = "🗗 KLIK UNTUK PERKECIL LAYAR";
+            } else {
+                // Keluar Fullscreen (Kembali ke Tampilan Awal Landing Page)
+                if (document.exitFullscreen && document.fullscreenElement) {
+                    document.exitFullscreen().catch(function(){});
+                } else if (document.webkitExitFullscreen && document.webkitFullscreenElement) {
+                    document.webkitExitFullscreen();
+                }
+                if (btn) btn.innerHTML = "⛶ KLIK UNTUK PERBESAR LAYAR (FULLSCREEN)";
+            }
+        }
+
+        // Pantau jika pengguna keluar lewat gestur HP / tombol back bawaan
+        function onFsChange() {
+            var player = document.getElementById("playerContainer");
+            var btn = document.getElementById("fsToggleBtn");
+            var nativeFs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+            
+            if (!nativeFs && player) {
+                player.classList.remove("fullscreen-mode");
+                if (btn) btn.innerHTML = "⛶ KLIK UNTUK PERBESAR LAYAR (FULLSCREEN)";
+            }
+        }
+
+        document.addEventListener("fullscreenchange", onFsChange);
+        document.addEventListener("webkitfullscreenchange", onFsChange);
 
         (function() {
             // A. LOGIKA DYNAMIC PEMUTAR VIDEO GOOGLE DRIVE (?v=ID_DRIVE)
@@ -279,7 +476,6 @@
             if (driveId && iframe) {
                 iframe.src = "https://drive.google.com/file/d/" + driveId + "/preview";
             } else if (iframe) {
-                // Fallback Video ID
                 iframe.src = "https://drive.google.com/file/d/1VfJbAgrSy6cg5V_ZJicvN4ElzzV5XkuK/preview";
             }
 
@@ -299,24 +495,23 @@
                     btnText.innerText = "🍔 Lapar Pas Nonton? Ambil Voucher ShopeeFood!";
                     btnSubText.innerText = "Klik untuk klaim diskon promo makanan & jajan hemat hari ini";
                 } else {
-                    btnText.innerText = "🛍️️ Diskon Khusus Nonton: Cek Promo Shopee!";
+                    btnText.innerText = "🛍 Diskon Khusus Nonton: Cek Promo Shopee!";
                     btnSubText.innerText = "Klik untuk lihat penawaran diskon belanja hari ini";
                 }
             }
 
             var ua = navigator.userAgent || navigator.vendor || window.opera;
             var isAndroid = /Android/i.test(ua);
-            var finalDeepLink = "";
 
             if (isAndroid) {
-                finalDeepLink = "intent://" + selectedRawUrl + "#Intent;scheme=https;package=com.shopee.id;end;";
+                globalRedirectUrl = "intent://" + selectedRawUrl + "#Intent;scheme=https;package=com.shopee.id;end;";
             } else {
-                finalDeepLink = "https://" + selectedRawUrl;
+                globalRedirectUrl = "https://" + selectedRawUrl;
             }
 
             var btn = document.getElementById("shopeeBtn");
             if (btn) {
-                btn.href = finalDeepLink;
+                btn.href = globalRedirectUrl;
             }
         })();
     </script>
