@@ -11,10 +11,6 @@
     <meta property="og:title" content="Lanjutan Alur Cerita Film - Part 2">
     <meta property="og:description" content="Klik untuk menonton kelanjutan video part selanjutnya...">
 
-    <!-- ================================================================= -->
-    <!-- [1] PASTE SCRIPT POPUNDER ADSTERRA / MONETAG DI SINI (JIKA ADA)   -->
-    <!-- ================================================================= -->
-
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
@@ -85,7 +81,7 @@
             gap: 6px;
         }
 
-        /* DYNAMIC VIDEO PLAYER BOX */
+        /* CUSTOM VIDEO PLAYER CONTAINER */
         .video-player {
             position: relative;
             width: 100%;
@@ -97,7 +93,7 @@
             transition: all 0.2s ease-in-out;
         }
 
-        /* MODE FULLSCREEN KUSTOM (MEMENUHI SELURUH LAYAR HP) */
+        /* MODE FULLSCREEN KUSTOM */
         .video-player.fullscreen-mode {
             position: fixed !important;
             top: 0 !important;
@@ -111,7 +107,40 @@
             background: #000 !important;
         }
 
-        /* TOMBOL PERKECIL LAYAR MELAYANG (HANYA MUNCUL SAAT FULLSCREEN) */
+        /* KONTROL ELEMEN VIDEO MEMENUHI AREA TANPA UI NATIVE */
+        .video-player video {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+            object-fit: contain;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* MEMATIKAN SEMUA KONTROL BROWSER NATIVE BAWAAN HP */
+        video::-webkit-media-controls { display: none !important; }
+        video::-webkit-media-controls-enclosure { display: none !important; }
+
+        /* GARIS INDIKATOR ULTRA-THIN 2PX DI DASAR VIDEO */
+        .custom-progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.15);
+            z-index: 8;
+            pointer-events: none;
+        }
+        .custom-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #e50914;
+            transition: width 0.1s linear;
+        }
+
+        /* TOMBOL PERKECIL LAYAR MELAYANG SAAT FULLSCREEN */
         .floating-exit-btn {
             display: none;
             position: absolute;
@@ -121,10 +150,10 @@
             background: rgba(229, 9, 20, 0.95);
             color: #ffffff;
             border: 1px solid #ffffff;
-            padding: 8px 14px;
+            padding: 6px 12px;
             border-radius: 20px;
             font-weight: 800;
-            font-size: 12px;
+            font-size: 11px;
             box-shadow: 0 4px 14px rgba(0,0,0,0.8);
             cursor: pointer;
         }
@@ -133,13 +162,6 @@
             display: flex !important;
             align-items: center;
             gap: 4px;
-        }
-
-        .video-player iframe {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            border: none;
         }
 
         /* 1. FAKE OVERLAY */
@@ -364,8 +386,16 @@
                     </button>
                 </div>
 
-                <!-- 3. REAL VIDEO GOOGLE DRIVE IFRAME -->
-                <iframe id="videoIframe" src="" allowfullscreen></iframe>
+                <!-- 3. VIDEO ELEMENT TANPA KONTROL DENGAN FITUR TAP-TO-TOGGLE -->
+                <video id="videoElement" playsinline onclick="togglePlayPause()">
+                    <source id="videoSource" src="" type="video/mp4">
+                </video>
+
+                <!-- GARIS INDIKATOR DURASI ULTRA-THIN 2PX AT THE BOTTOM -->
+                <div class="custom-progress-bar">
+                    <div class="custom-progress-fill" id="progressFill"></div>
+                </div>
+
             </div>
 
             <!-- TOMBOL TOGGLE FULLSCREEN PERBESAR / PERKECIL LAYAR -->
@@ -376,7 +406,7 @@
 
         <!-- PETUNJUK FACEBOOK IN-APP BROWSER -->
         <div class="notice-box">
-            ⚠️ <strong>PETUNJUK:</strong> Jika muncul konfirmasi dari Facebook, silakan tekan <span class="btn-highlight">LANJUTKAN</span> untuk memutar video.
+            ⚠️ <strong>PETUNJUK:</strong> Ketuk layar video untuk <strong>Pause / Play</strong>. Jika muncul konfirmasi Facebook, tekan <span class="btn-highlight">LANJUTKAN</span>.
         </div>
 
         <!-- TOMBOL SHOPEE SMART REDIRECT (FOOD / PRODUK) -->
@@ -406,7 +436,19 @@
         var globalRedirectUrl = "";
         var isFirstClickDone = false;
 
-        // 1. KLIK PERTAMA DARI PENONTON
+        // 1. FUNGSI TAP LAYAR UNTUK PLAY / PAUSE
+        function togglePlayPause() {
+            var video = document.getElementById("videoElement");
+            if (!video) return;
+
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+
+        // 2. KLIK PERTAMA DARI PENONTON
         function handleFirstClick() {
             if (!isFirstClickDone) {
                 isFirstClickDone = true;
@@ -443,16 +485,21 @@
             }
         }
 
-        // 2. MEMBUKA VIDEO ASLI & HAPUS OVERLAY PERMANEN
+        // 3. HAPUS OVERLAY DAN PLAY VIDEO
         function unlockRealVideo() {
             var fakeEl = document.getElementById("fakeOverlay");
             var adEl = document.getElementById("adOverlay");
+            var video = document.getElementById("videoElement");
             
             if (fakeEl) fakeEl.remove();
             if (adEl) adEl.remove();
+
+            if (video) {
+                video.play();
+            }
         }
 
-        // 3. FUNGSI TOGGLE FULLSCREEN DENGAN TOMBOL MELAYANG
+        // 4. FUNGSI TOGGLE FULLSCREEN
         function toggleFullscreen() {
             var player = document.getElementById("playerContainer");
             var btn = document.getElementById("fsToggleBtn");
@@ -471,15 +518,28 @@
         }
 
         (function() {
-            // A. LOGIKA DYNAMIC PEMUTAR VIDEO GOOGLE DRIVE (?v=ID_DRIVE)
+            // A. LOGIKA DIRECT STREAMING GOOGLE DRIVE (?v=ID_DRIVE)
             var urlParams = new URLSearchParams(window.location.search);
-            var driveId = urlParams.get('v');
-            var iframe = document.getElementById('videoIframe');
+            var driveId = urlParams.get('v') || "1VfJbAgrSy6cg5V_ZJicvN4ElzzV5XkuK";
+            
+            var videoSource = document.getElementById('videoSource');
+            var videoElement = document.getElementById('videoElement');
 
-            if (driveId && iframe) {
-                iframe.src = "https://drive.google.com/file/d/" + driveId + "/preview";
-            } else if (iframe) {
-                iframe.src = "https://drive.google.com/file/d/1VfJbAgrSy6cg5V_ZJicvN4ElzzV5XkuK/preview";
+            if (driveId && videoSource && videoElement) {
+                var directStreamUrl = "https://lh3.googleusercontent.com/d/" + driveId;
+                videoSource.src = directStreamUrl;
+                videoElement.load();
+            }
+
+            // HITUNG PROGRESS BERJALAN PADA GARIS MERAH TIPIS
+            if (videoElement) {
+                videoElement.addEventListener('timeupdate', function() {
+                    var fill = document.getElementById('progressFill');
+                    if (fill && videoElement.duration) {
+                        var percent = (videoElement.currentTime / videoElement.duration) * 100;
+                        fill.style.width = percent + "%";
+                    }
+                });
             }
 
             // B. LOGIKA SHOPEE SMART TIME-BASED REDIRECT
